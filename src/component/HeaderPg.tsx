@@ -1,4 +1,4 @@
-import React, { useState,useContext } from "react";
+import React, { useState} from "react";
 import {
   AppstoreOutlined,
   MailOutlined,
@@ -6,9 +6,6 @@ import {
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
-import {Mcontext} from '../context/MainContext'
-import { Button, message } from 'antd';
-
 
 const items: MenuProps["items"] = [
   {
@@ -34,15 +31,10 @@ const HeaderPg: React.FC = () => {
   const onClick: MenuProps["onClick"] = (e) => {
     setCurrent(e.key);
   };
-  const { installprompt }: any = useContext(Mcontext);
 
-
- 
   return (
     <div style={{ display: "flex" }}>
-       <Button type="primary" onClick={()=>installprompt.prompt()}>
-       add to
-      </Button>
+   
       <Menu
         theme="dark"
         onClick={onClick}
