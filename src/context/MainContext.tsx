@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Button, Space } from 'antd';
+import { Alert, Button, Space } from "antd";
+import { log } from "console";
+
 
 interface ChildComponentProps {
   children: React.ReactNode;
@@ -14,13 +16,15 @@ export interface MainContextState {
 }
 
 export const Mcontext = React.createContext({
-  install: null as BeforeInstallPromptEvent | null // Adjust the type here too
+  install: null as BeforeInstallPromptEvent | null, // Adjust the type here too
 });
 
 export const MainContext = ({ children }: ChildComponentProps) => {
   const [state, setState] = useState<MainContextState>({
-    installprompt: null
+    installprompt: null,
   });
+
+  const [closeAlert, setCloseAlert] = useState<Boolean>(false);
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
@@ -31,32 +35,56 @@ export const MainContext = ({ children }: ChildComponentProps) => {
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
     };
-  }, [state]);
+  }, []);
+
+  const installHandler = () => {
+    console.log(state);
+    if (state.installprompt) {
+      state.installprompt?.prompt();
+      setCloseAlert(true);
+      console.log(state.installprompt);
+      
+    }
+  };
 
   return (
     <div>
       <Mcontext.Provider value={{ install: state.installprompt }}>
-        <Space direction="vertical" style={{ width: '100%' }}>
-          <Alert
-            message="Install"
-            description="You can add the app to your screen with the install button"
-            type="info"
-            action={
-              <Space direction="vertical">
-                <Button
-                  size="small"
-                  type="primary"
-                  onClick={() => state.installprompt?.prompt()}
-                >
-                  Install
-                </Button>
-              </Space>
-            }
-            closable
-          />
-        </Space>
+        {closeAlert ? (
+          ""
+        ) : (
+          <Space direction="vertical" style={{ width: "100%" }}>
+            <Alert
+              message="Install"
+              description="لطفا جهت نصب بر روی دکمه install کلیک نمایید"
+              type="info"
+              action={
+                <Space direction="vertical">
+                  <Button
+                    size="small"
+                    type="primary"
+                    onClick={() => installHandler()}
+                  >
+                    Install
+                  </Button>
+                  <Button
+                    size="small"
+                    type="primary"
+                    color="red"
+                    onClick={() => setCloseAlert(true)}
+                  >
+                    close
+                  </Button>
+                </Space>
+              }
+            />
+          </Space>
+        )}
         {children}
       </Mcontext.Provider>
     </div>
