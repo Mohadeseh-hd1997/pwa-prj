@@ -40,7 +40,6 @@
     "serve": "react-scripts serve",
     "start-sw": "serve -s ./build -p 3000"
   },
-  
   "eslintConfig": {
     "extends": [
       "react-app",
