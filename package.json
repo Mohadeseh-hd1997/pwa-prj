@@ -33,12 +33,9 @@
     "workbox-streams": "^6.6.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "serve": "react-scripts serve",
-    "start-sw": "serve -s ./build -p 3000"
+    "start": "react-scripts start --host 192.168.1.25 --port 3000",
+    "build": "react-scripts build --host 192.168.1.25 --port 3000",
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
